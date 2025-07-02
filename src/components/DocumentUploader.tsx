@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { UploadCloud, FileText, X, BarChart3, Eye, EyeOff, Zap, Sparkles } from 'lucide-react'
+import { UploadCloud, FileText, X, BarChart3, Eye, EyeOff, Sparkles } from 'lucide-react'
 import { GPTResumeAnalyzer } from '../utils/gptAnalyzer'
 import { ResumeAnalysis } from '../types/resume'
 import ResumeScoreCard from './ResumeScoreCard'
 import ResumeAdvice from './ResumeAdvice'
-import APIKeyModal from './APIKeyModal'
 
 // Import PDF.js using ESM syntax
 import * as pdfjsLib from 'pdfjs-dist'
@@ -22,8 +21,9 @@ const DocumentUploader: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null)
   const [showRawText, setShowRawText] = useState(false)
-  const [showAPIModal, setShowAPIModal] = useState(false)
-  const [pendingFile, setPendingFile] = useState<FileWithPreview | null>(null)
+
+  // You can set your OpenAI API key here or use environment variable
+  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || 'your-openai-api-key-here'
 
   const getFileExtension = (filename: string = ''): string => {
     return filename.split('.').pop()?.toLowerCase() || ''
@@ -63,6 +63,7 @@ const DocumentUploader: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
 
+    setIsLoading(true)
     setError(null)
     setAnalysis(null)
 
@@ -91,34 +92,23 @@ const DocumentUploader: React.FC = () => {
           || 'Unsupported file type'
       }
 
+      setCurrentFile(fileWithPreview)
+
+      // Analyze the resume with GPT
       if (fileWithPreview.content && fileWithPreview.content !== 'Unsupported file type') {
-        setPendingFile(fileWithPreview)
-        setShowAPIModal(true)
+        if (!OPENAI_API_KEY || OPENAI_API_KEY === 'your-openai-api-key-here') {
+          setError('OpenAI API key not configured. Please add your API key to the environment variables.')
+          return
+        }
+
+        const analyzer = new GPTResumeAnalyzer(fileWithPreview.content, OPENAI_API_KEY)
+        const resumeAnalysis = await analyzer.analyze()
+        setAnalysis(resumeAnalysis)
       } else {
         setError('Could not extract text from the file. Please try a different format.')
       }
-    } catch (err) {
-      setError('Failed to process file. Please try again.')
-      console.error('Processing error:', err)
-    }
-  }
-
-  const handleAPIKeySubmit = async (apiKey: string) => {
-    if (!pendingFile?.content) return
-
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const analyzer = new GPTResumeAnalyzer(pendingFile.content, apiKey)
-      const resumeAnalysis = await analyzer.analyze()
-      
-      setCurrentFile(pendingFile)
-      setAnalysis(resumeAnalysis)
-      setShowAPIModal(false)
-      setPendingFile(null)
     } catch (err: any) {
-      setError(err.message || 'Failed to analyze resume. Please check your API key and try again.')
+      setError(err.message || 'Failed to analyze resume. Please try again.')
       console.error('Analysis error:', err)
     } finally {
       setIsLoading(false)
@@ -361,17 +351,6 @@ const DocumentUploader: React.FC = () => {
           <p>Powered by OpenAI GPT Technology • Secure & Private • Professional AI Analysis</p>
         </div>
       </div>
-
-      {/* API Key Modal */}
-      <APIKeyModal
-        isOpen={showAPIModal}
-        onClose={() => {
-          setShowAPIModal(false)
-          setPendingFile(null)
-        }}
-        onSubmit={handleAPIKeySubmit}
-        isLoading={isLoading}
-      />
     </div>
   )
 }
