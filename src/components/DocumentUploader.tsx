@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { UploadCloud, FileText, X, BarChart3, Eye, EyeOff, Zap } from 'lucide-react'
-import { ResumeAnalyzer } from '../utils/resumeAnalyzer'
+import { UploadCloud, FileText, X, BarChart3, Eye, EyeOff, Zap, Sparkles } from 'lucide-react'
+import { GPTResumeAnalyzer } from '../utils/gptAnalyzer'
 import { ResumeAnalysis } from '../types/resume'
 import ResumeScoreCard from './ResumeScoreCard'
 import ResumeAdvice from './ResumeAdvice'
+import APIKeyModal from './APIKeyModal'
 
 // Import PDF.js using ESM syntax
 import * as pdfjsLib from 'pdfjs-dist'
@@ -21,6 +22,8 @@ const DocumentUploader: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null)
   const [showRawText, setShowRawText] = useState(false)
+  const [showAPIModal, setShowAPIModal] = useState(false)
+  const [pendingFile, setPendingFile] = useState<FileWithPreview | null>(null)
 
   const getFileExtension = (filename: string = ''): string => {
     return filename.split('.').pop()?.toLowerCase() || ''
@@ -60,7 +63,6 @@ const DocumentUploader: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
 
-    setIsLoading(true)
     setError(null)
     setAnalysis(null)
 
@@ -89,17 +91,35 @@ const DocumentUploader: React.FC = () => {
           || 'Unsupported file type'
       }
 
-      setCurrentFile(fileWithPreview)
-
-      // Analyze the resume
       if (fileWithPreview.content && fileWithPreview.content !== 'Unsupported file type') {
-        const analyzer = new ResumeAnalyzer(fileWithPreview.content)
-        const resumeAnalysis = analyzer.analyze()
-        setAnalysis(resumeAnalysis)
+        setPendingFile(fileWithPreview)
+        setShowAPIModal(true)
+      } else {
+        setError('Could not extract text from the file. Please try a different format.')
       }
     } catch (err) {
       setError('Failed to process file. Please try again.')
       console.error('Processing error:', err)
+    }
+  }
+
+  const handleAPIKeySubmit = async (apiKey: string) => {
+    if (!pendingFile?.content) return
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const analyzer = new GPTResumeAnalyzer(pendingFile.content, apiKey)
+      const resumeAnalysis = await analyzer.analyze()
+      
+      setCurrentFile(pendingFile)
+      setAnalysis(resumeAnalysis)
+      setShowAPIModal(false)
+      setPendingFile(null)
+    } catch (err: any) {
+      setError(err.message || 'Failed to analyze resume. Please check your API key and try again.')
+      console.error('Analysis error:', err)
     } finally {
       setIsLoading(false)
     }
@@ -128,23 +148,23 @@ const DocumentUploader: React.FC = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-2xl shadow-lg">
-              <Zap className="w-8 h-8 text-white" />
+              <Sparkles className="w-8 h-8 text-white" />
             </div>
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-3">
-            MakeResumeAI - Free AI Resume Analyzer
+            MakeResumeAI - AI Resume Analyzer
           </h1>
           <h2 className="text-xl text-gray-600 max-w-3xl mx-auto mb-4 font-medium">
-            Get instant professional feedback on your CV with AI-powered analysis and detailed scoring
+            Get professional AI-powered resume analysis with GPT technology
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-            Upload your resume and receive comprehensive analysis with actionable recommendations to improve your job application success rate. Our AI resume checker evaluates formatting, content quality, ATS optimization, and provides industry-specific feedback.
+            Upload your resume and receive comprehensive AI analysis with realistic scoring, detailed feedback, and actionable recommendations powered by OpenAI's GPT.
           </p>
           <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-600 mb-4">
-            <span className="bg-white/70 px-4 py-2 rounded-full border border-blue-200">✓ ATS Optimization Analysis</span>
-            <span className="bg-white/70 px-4 py-2 rounded-full border border-green-200">✓ Professional Scoring System</span>
-            <span className="bg-white/70 px-4 py-2 rounded-full border border-purple-200">✓ Instant AI-Powered Results</span>
-            <span className="bg-white/70 px-4 py-2 rounded-full border border-orange-200">✓ Industry-Specific Feedback</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-blue-200">✓ GPT-Powered Analysis</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-green-200">✓ Realistic AI Scoring</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-purple-200">✓ Professional Feedback</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-orange-200">✓ Actionable Insights</span>
           </div>
         </div>
 
@@ -157,10 +177,10 @@ const DocumentUploader: React.FC = () => {
                   <UploadCloud className="w-8 h-8 text-blue-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  Upload Your Resume for Free AI Analysis
+                  Upload Your Resume for AI Analysis
                 </h3>
                 <p className="text-gray-500 mb-6 max-w-lg">
-                  Get instant AI-powered resume analysis with detailed scoring, professional feedback, and actionable improvement recommendations. Our resume checker evaluates your CV against industry standards and ATS requirements.
+                  Get realistic AI-powered resume analysis using OpenAI's GPT technology. Receive professional feedback, detailed scoring, and improvement recommendations.
                 </p>
                 <label className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold">
                   <input
@@ -169,10 +189,10 @@ const DocumentUploader: React.FC = () => {
                     accept=".pdf,.docx,.doc"
                     onChange={handleFileChange}
                   />
-                  Analyze My Resume Now - Free
+                  Analyze with AI - Upload Resume
                 </label>
                 <p className="text-xs text-gray-400 mt-4">
-                  Supports PDF, DOCX, DOC formats • Maximum 10MB • Secure & Private • No Registration Required
+                  Supports PDF, DOCX, DOC • Powered by OpenAI GPT • Secure Analysis
                 </p>
               </div>
             </div>
@@ -183,11 +203,11 @@ const DocumentUploader: React.FC = () => {
                 <div className="relative">
                   <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-blue-600" />
+                    <Sparkles className="w-5 h-5 text-blue-600" />
                   </div>
                 </div>
                 <p className="mt-4 text-gray-600 font-medium">AI is analyzing your resume...</p>
-                <p className="text-sm text-gray-500">Generating professional insights and improvement recommendations</p>
+                <p className="text-sm text-gray-500">GPT is generating professional insights and recommendations</p>
               </div>
             )}
 
@@ -212,13 +232,16 @@ const DocumentUploader: React.FC = () => {
                       <span className="font-medium text-gray-700">{currentFile.name}</span>
                       <div className="text-sm text-gray-500">
                         {analysis.insights.wordCount} words • {analysis.insights.pageEstimate} page(s) • 
-                        Resume Score: <span className={`font-bold ${getScoreColor(analysis.score.overall)}`}>
+                        AI Score: <span className={`font-bold ${getScoreColor(analysis.score.overall)}`}>
                           {analysis.score.overall}%
                         </span>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                      AI Analyzed
+                    </span>
                     <button
                       onClick={() => setShowRawText(!showRawText)}
                       className="flex items-center text-sm text-blue-600 hover:text-blue-800 px-3 py-1 rounded-md hover:bg-blue-50"
@@ -302,31 +325,31 @@ const DocumentUploader: React.FC = () => {
         <div className="mt-12 bg-white rounded-xl p-8 shadow-lg border border-gray-100">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-              Why Use MakeResumeAI for Resume Analysis?
+              Why Use AI-Powered Resume Analysis?
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">AI-Powered Resume Checker</h3>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">GPT-Powered Analysis</h3>
                 <p className="text-gray-600 mb-4">
-                  Our advanced AI resume analyzer evaluates your CV against industry standards, providing detailed feedback on content quality, formatting, and ATS optimization. Get professional insights that help you stand out to recruiters and hiring managers.
+                  Our AI resume analyzer uses OpenAI's GPT technology to provide realistic, professional feedback on your CV. Get detailed insights that help you stand out to recruiters and hiring managers.
                 </p>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Comprehensive resume scoring system</li>
-                  <li>• ATS compatibility analysis</li>
+                  <li>• Realistic AI scoring system</li>
+                  <li>• Professional feedback quality</li>
                   <li>• Industry-specific recommendations</li>
-                  <li>• Professional formatting suggestions</li>
+                  <li>• ATS optimization analysis</li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">Instant Resume Feedback</h3>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">Actionable AI Insights</h3>
                 <p className="text-gray-600 mb-4">
-                  Upload your resume and receive immediate analysis with actionable improvement suggestions. Our CV checker identifies strengths, weaknesses, and provides specific recommendations to enhance your job application success rate.
+                  Receive comprehensive analysis with specific improvement suggestions powered by advanced AI. Our system identifies strengths, weaknesses, and provides targeted recommendations.
                 </p>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Real-time analysis results</li>
                   <li>• Detailed improvement roadmap</li>
-                  <li>• Skills and experience optimization</li>
+                  <li>• Skills optimization suggestions</li>
                   <li>• Achievement quantification tips</li>
+                  <li>• Professional formatting advice</li>
                 </ul>
               </div>
             </div>
@@ -335,9 +358,20 @@ const DocumentUploader: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>Powered by Advanced AI Technology • 100% Secure & Private • No Data Stored • Free Resume Analysis Tool</p>
+          <p>Powered by OpenAI GPT Technology • Secure & Private • Professional AI Analysis</p>
         </div>
       </div>
+
+      {/* API Key Modal */}
+      <APIKeyModal
+        isOpen={showAPIModal}
+        onClose={() => {
+          setShowAPIModal(false)
+          setPendingFile(null)
+        }}
+        onSubmit={handleAPIKeySubmit}
+        isLoading={isLoading}
+      />
     </div>
   )
 }
