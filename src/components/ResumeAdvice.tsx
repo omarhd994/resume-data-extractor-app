@@ -120,7 +120,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
         <div className="bg-red-50 border border-red-200 rounded-xl p-6">
           <h3 className="text-lg font-bold text-red-800 mb-4 flex items-center">
             <AlertTriangle className="w-5 h-5 mr-2" />
-            Critical Issues to Fix
+            Critical Issues
           </h3>
           <ul className="space-y-2">
             {criticalIssues.map((issue, index) => (
@@ -138,7 +138,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
         <div className="bg-green-50 border border-green-200 rounded-xl p-6">
           <h3 className="text-lg font-bold text-green-800 mb-4 flex items-center">
             <CheckCircle className="w-5 h-5 mr-2" />
-            Your Strengths
+            Strengths
           </h3>
           <ul className="space-y-2">
             {strengths.map((strength, index) => (
@@ -159,9 +159,6 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
               <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
               Improvement Recommendations
             </h3>
-            <p className="text-sm text-gray-600 mt-1">
-              Prioritized suggestions to enhance your resume
-            </p>
           </div>
           
           <div className="divide-y divide-gray-100">
@@ -229,7 +226,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
       <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
         <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center">
           <Award className="w-5 h-5 mr-2" />
-          Pro Tips for Resume Success
+          Pro Tips
         </h3>
         
         <div className="grid md:grid-cols-2 gap-4">
@@ -238,7 +235,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
               <Target className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <div className="font-medium text-blue-800 text-sm">Tailor for Each Job</div>
-                <div className="text-blue-700 text-xs">Customize keywords and skills for each application</div>
+                <div className="text-blue-700 text-xs">Customize keywords for each application</div>
               </div>
             </div>
             
@@ -246,7 +243,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
               <Users className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <div className="font-medium text-blue-800 text-sm">Show Impact</div>
-                <div className="text-blue-700 text-xs">Focus on results and achievements, not just duties</div>
+                <div className="text-blue-700 text-xs">Focus on results, not just duties</div>
               </div>
             </div>
           </div>
@@ -255,8 +252,8 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
             <div className="flex items-start">
               <Clock className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <div className="font-medium text-blue-800 text-sm">Keep It Current</div>
-                <div className="text-blue-700 text-xs">Update regularly with new skills and experiences</div>
+                <div className="font-medium text-blue-800 text-sm">Keep Current</div>
+                <div className="text-blue-700 text-xs">Update with new skills regularly</div>
               </div>
             </div>
             
@@ -264,7 +261,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
               <FileText className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <div className="font-medium text-blue-800 text-sm">Format Matters</div>
-                <div className="text-blue-700 text-xs">Use consistent formatting and professional fonts</div>
+                <div className="text-blue-700 text-xs">Use consistent formatting</div>
               </div>
             </div>
           </div>
