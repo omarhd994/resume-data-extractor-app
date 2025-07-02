@@ -132,15 +132,19 @@ const DocumentUploader: React.FC = () => {
             </div>
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-3">
-            MakeResumeAI
+            MakeResumeAI - Free AI Resume Analyzer
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto mb-4">
-            AI-powered resume analyzer with instant feedback and professional scoring
+          <h2 className="text-xl text-gray-600 max-w-3xl mx-auto mb-4 font-medium">
+            Get instant professional feedback on your CV with AI-powered analysis and detailed scoring
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+            Upload your resume and receive comprehensive analysis with actionable recommendations to improve your job application success rate. Our AI resume checker evaluates formatting, content quality, ATS optimization, and provides industry-specific feedback.
           </p>
-          <div className="flex flex-wrap justify-center gap-2 text-sm text-gray-500">
-            <span className="bg-white/60 px-3 py-1 rounded-full">✓ ATS Optimization</span>
-            <span className="bg-white/60 px-3 py-1 rounded-full">✓ Professional Scoring</span>
-            <span className="bg-white/60 px-3 py-1 rounded-full">✓ Instant Analysis</span>
+          <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-600 mb-4">
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-blue-200">✓ ATS Optimization Analysis</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-green-200">✓ Professional Scoring System</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-purple-200">✓ Instant AI-Powered Results</span>
+            <span className="bg-white/70 px-4 py-2 rounded-full border border-orange-200">✓ Industry-Specific Feedback</span>
           </div>
         </div>
 
@@ -153,22 +157,22 @@ const DocumentUploader: React.FC = () => {
                   <UploadCloud className="w-8 h-8 text-blue-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  Upload Your Resume
+                  Upload Your Resume for Free AI Analysis
                 </h3>
-                <p className="text-gray-500 mb-6 max-w-md">
-                  Get instant AI analysis with detailed scoring and improvement recommendations
+                <p className="text-gray-500 mb-6 max-w-lg">
+                  Get instant AI-powered resume analysis with detailed scoring, professional feedback, and actionable improvement recommendations. Our resume checker evaluates your CV against industry standards and ATS requirements.
                 </p>
-                <label className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <label className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold">
                   <input
                     type="file"
                     className="hidden"
                     accept=".pdf,.docx,.doc"
                     onChange={handleFileChange}
                   />
-                  Analyze My Resume
+                  Analyze My Resume Now - Free
                 </label>
-                <p className="text-xs text-gray-400 mt-3">
-                  PDF, DOCX, DOC • Max 10MB • Secure & Private
+                <p className="text-xs text-gray-400 mt-4">
+                  Supports PDF, DOCX, DOC formats • Maximum 10MB • Secure & Private • No Registration Required
                 </p>
               </div>
             </div>
@@ -182,8 +186,8 @@ const DocumentUploader: React.FC = () => {
                     <Zap className="w-5 h-5 text-blue-600" />
                   </div>
                 </div>
-                <p className="mt-4 text-gray-600 font-medium">Analyzing your resume...</p>
-                <p className="text-sm text-gray-500">Generating insights and recommendations</p>
+                <p className="mt-4 text-gray-600 font-medium">AI is analyzing your resume...</p>
+                <p className="text-sm text-gray-500">Generating professional insights and improvement recommendations</p>
               </div>
             )}
 
@@ -208,7 +212,7 @@ const DocumentUploader: React.FC = () => {
                       <span className="font-medium text-gray-700">{currentFile.name}</span>
                       <div className="text-sm text-gray-500">
                         {analysis.insights.wordCount} words • {analysis.insights.pageEstimate} page(s) • 
-                        Score: <span className={`font-bold ${getScoreColor(analysis.score.overall)}`}>
+                        Resume Score: <span className={`font-bold ${getScoreColor(analysis.score.overall)}`}>
                           {analysis.score.overall}%
                         </span>
                       </div>
@@ -222,12 +226,12 @@ const DocumentUploader: React.FC = () => {
                       {showRawText ? (
                         <>
                           <EyeOff className="w-4 h-4 mr-1" />
-                          Hide Text
+                          Hide Content
                         </>
                       ) : (
                         <>
                           <Eye className="w-4 h-4 mr-1" />
-                          View Text
+                          View Content
                         </>
                       )}
                     </button>
@@ -255,7 +259,7 @@ const DocumentUploader: React.FC = () => {
                     <div className="flex items-center mb-6">
                       <BarChart3 className="w-6 h-6 text-blue-600 mr-3" />
                       <h2 className="text-2xl font-bold text-gray-800">
-                        Analysis & Recommendations
+                        AI Analysis & Professional Recommendations
                       </h2>
                     </div>
                     
@@ -273,12 +277,12 @@ const DocumentUploader: React.FC = () => {
                   <div className="mt-8">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <FileText className="w-5 h-5 mr-2" />
-                      Extracted Content
+                      Extracted Resume Content
                     </h3>
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
                       <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
                         <span className="text-sm text-gray-600">
-                          Raw text from your resume
+                          Raw text content extracted from your resume file
                         </span>
                       </div>
                       <div className="p-6 bg-gray-50 max-h-96 overflow-y-auto">
@@ -294,9 +298,44 @@ const DocumentUploader: React.FC = () => {
           </div>
         </div>
 
+        {/* SEO Content Section */}
+        <div className="mt-12 bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              Why Use MakeResumeAI for Resume Analysis?
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">AI-Powered Resume Checker</h3>
+                <p className="text-gray-600 mb-4">
+                  Our advanced AI resume analyzer evaluates your CV against industry standards, providing detailed feedback on content quality, formatting, and ATS optimization. Get professional insights that help you stand out to recruiters and hiring managers.
+                </p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Comprehensive resume scoring system</li>
+                  <li>• ATS compatibility analysis</li>
+                  <li>• Industry-specific recommendations</li>
+                  <li>• Professional formatting suggestions</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">Instant Resume Feedback</h3>
+                <p className="text-gray-600 mb-4">
+                  Upload your resume and receive immediate analysis with actionable improvement suggestions. Our CV checker identifies strengths, weaknesses, and provides specific recommendations to enhance your job application success rate.
+                </p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Real-time analysis results</li>
+                  <li>• Detailed improvement roadmap</li>
+                  <li>• Skills and experience optimization</li>
+                  <li>• Achievement quantification tips</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>Powered by AI • Secure & Private • No data stored</p>
+          <p>Powered by Advanced AI Technology • 100% Secure & Private • No Data Stored • Free Resume Analysis Tool</p>
         </div>
       </div>
     </div>
