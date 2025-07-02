@@ -109,7 +109,7 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ isOpen, onClose, onSubmit, is
                 )}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
