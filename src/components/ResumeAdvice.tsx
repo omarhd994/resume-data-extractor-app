@@ -68,38 +68,45 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
       low: 'bg-green-100 text-green-800'
     }
     
+    const labels = {
+      critical: 'URGENT',
+      high: 'IMPORTANT',
+      medium: 'HELPFUL',
+      low: 'NICE TO HAVE'
+    }
+    
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[impact as keyof typeof colors]}`}>
-        {impact.toUpperCase()}
+        {labels[impact as keyof typeof labels]}
       </span>
     )
   }
 
   return (
     <div className="space-y-6">
-      {/* Resume Insights */}
+      {/* Resume Overview */}
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
         <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
           <FileText className="w-5 h-5 mr-2 text-indigo-600" />
-          Resume Insights
+          Resume Overview
         </h3>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-indigo-600">{insights.wordCount}</div>
-            <div className="text-sm text-gray-600">Words</div>
+            <div className="text-sm text-gray-600">Total Words</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-purple-600">{insights.experienceYears}</div>
-            <div className="text-sm text-gray-600">Years Exp.</div>
+            <div className="text-sm text-gray-600">Years Experience</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">{insights.skillsCount}</div>
-            <div className="text-sm text-gray-600">Skills</div>
+            <div className="text-sm text-gray-600">Skills Listed</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">{insights.quantifiedAchievements}</div>
-            <div className="text-sm text-gray-600">Metrics</div>
+            <div className="text-sm text-gray-600">Results Shown</div>
           </div>
         </div>
 
@@ -120,8 +127,9 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
         <div className="bg-red-50 border border-red-200 rounded-xl p-6">
           <h3 className="text-lg font-bold text-red-800 mb-4 flex items-center">
             <AlertTriangle className="w-5 h-5 mr-2" />
-            Critical Issues
+            Fix These First
           </h3>
+          <p className="text-sm text-red-700 mb-4">These issues could prevent you from getting interviews:</p>
           <ul className="space-y-2">
             {criticalIssues.map((issue, index) => (
               <li key={index} className="flex items-start text-red-700">
@@ -138,7 +146,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
         <div className="bg-green-50 border border-green-200 rounded-xl p-6">
           <h3 className="text-lg font-bold text-green-800 mb-4 flex items-center">
             <CheckCircle className="w-5 h-5 mr-2" />
-            Strengths
+            What You're Doing Well
           </h3>
           <ul className="space-y-2">
             {strengths.map((strength, index) => (
@@ -157,7 +165,7 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
           <div className="p-6 border-b border-gray-100">
             <h3 className="text-lg font-bold text-gray-800 flex items-center">
               <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
-              Improvement Recommendations
+              How to Improve Your Resume
             </h3>
           </div>
           
@@ -201,12 +209,12 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
                     
                     {item.examples && expandedAdvice === index && (
                       <div className="mt-3 p-3 bg-white/60 rounded-lg">
-                        <div className="text-xs font-medium text-gray-600 mb-2">Examples:</div>
+                        <div className="text-xs font-medium text-gray-600 mb-2">Examples you can use:</div>
                         <ul className="space-y-1">
                           {item.examples.map((example, exIndex) => (
                             <li key={exIndex} className="text-xs text-gray-700 flex items-start">
                               <span className="text-blue-500 mr-2">•</span>
-                              <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
+                              <span className="bg-gray-100 px-2 py-1 rounded text-xs">
                                 {example}
                               </span>
                             </li>
@@ -222,11 +230,11 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
         </div>
       )}
 
-      {/* Pro Tips */}
+      {/* Quick Tips */}
       <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
         <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center">
           <Award className="w-5 h-5 mr-2" />
-          Pro Tips
+          Quick Tips for Better Results
         </h3>
         
         <div className="grid md:grid-cols-2 gap-4">
@@ -234,16 +242,16 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
             <div className="flex items-start">
               <Target className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <div className="font-medium text-blue-800 text-sm">Tailor for Each Job</div>
-                <div className="text-blue-700 text-xs">Customize keywords for each application</div>
+                <div className="font-medium text-blue-800 text-sm">Match the Job</div>
+                <div className="text-blue-700 text-xs">Use keywords from job postings you want</div>
               </div>
             </div>
             
             <div className="flex items-start">
               <Users className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <div className="font-medium text-blue-800 text-sm">Show Impact</div>
-                <div className="text-blue-700 text-xs">Focus on results, not just duties</div>
+                <div className="font-medium text-blue-800 text-sm">Show Results</div>
+                <div className="text-blue-700 text-xs">Include numbers: "Increased sales by 20%"</div>
               </div>
             </div>
           </div>
@@ -252,16 +260,16 @@ const ResumeAdvice: React.FC<ResumeAdviceProps> = ({
             <div className="flex items-start">
               <Clock className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <div className="font-medium text-blue-800 text-sm">Keep Current</div>
-                <div className="text-blue-700 text-xs">Update with new skills regularly</div>
+                <div className="font-medium text-blue-800 text-sm">Keep It Fresh</div>
+                <div className="text-blue-700 text-xs">Update regularly with new skills and achievements</div>
               </div>
             </div>
             
             <div className="flex items-start">
               <FileText className="w-4 h-4 text-blue-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <div className="font-medium text-blue-800 text-sm">Format Matters</div>
-                <div className="text-blue-700 text-xs">Use consistent formatting</div>
+                <div className="font-medium text-blue-800 text-sm">Easy to Read</div>
+                <div className="text-blue-700 text-xs">Use bullet points and clear headings</div>
               </div>
             </div>
           </div>

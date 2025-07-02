@@ -30,12 +30,21 @@ const ResumeScoreCard: React.FC<ResumeScoreCardProps> = ({ score, industryMatch 
   }
 
   const getOverallRating = (overall: number): string => {
-    if (overall >= 90) return 'Exceptional'
-    if (overall >= 85) return 'Excellent'
-    if (overall >= 70) return 'Strong'
-    if (overall >= 55) return 'Good'
-    if (overall >= 40) return 'Fair'
-    return 'Needs Work'
+    if (overall >= 90) return 'Outstanding'
+    if (overall >= 80) return 'Excellent'
+    if (overall >= 70) return 'Good'
+    if (overall >= 60) return 'Fair'
+    if (overall >= 50) return 'Needs Work'
+    return 'Major Issues'
+  }
+
+  const getRatingDescription = (overall: number): string => {
+    if (overall >= 90) return 'Your resume stands out from the crowd'
+    if (overall >= 80) return 'Strong resume that should get interviews'
+    if (overall >= 70) return 'Solid resume with room for improvement'
+    if (overall >= 60) return 'Decent resume but needs some work'
+    if (overall >= 50) return 'Several areas need improvement'
+    return 'Significant changes needed'
   }
 
   const getTrendIcon = (value: number) => {
@@ -98,13 +107,13 @@ const ResumeScoreCard: React.FC<ResumeScoreCardProps> = ({ score, industryMatch 
           <div className="text-lg font-semibold text-gray-700 mb-1">
             {getOverallRating(score.overall)}
           </div>
-          <div className="text-sm text-gray-500">Overall Resume Score</div>
+          <div className="text-sm text-gray-600 mb-2">{getRatingDescription(score.overall)}</div>
         </div>
         
         {/* Industry Match */}
         <div className="bg-white/50 rounded-lg p-3 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Industry Match</span>
+            <span className="text-sm font-medium text-gray-700">Job Market Fit</span>
             <span className={`text-sm font-bold ${getScoreColor(industryMatch)}`}>
               {industryMatch}%
             </span>
@@ -115,62 +124,63 @@ const ResumeScoreCard: React.FC<ResumeScoreCardProps> = ({ score, industryMatch 
               style={{ width: `${industryMatch}%` }}
             />
           </div>
+          <p className="text-xs text-gray-600 mt-1">How well your resume matches typical job requirements</p>
         </div>
       </div>
 
       {/* Detailed Scores */}
       <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-        <h3 className="text-lg font-bold text-gray-800 mb-6">Detailed Analysis</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-6">Detailed Breakdown</h3>
         
         <CategorySection
           title="Content Quality"
           scores={score.content}
           descriptions={{
-            experience: 'Work history depth and relevance',
-            skills: 'Technical and soft skills coverage',
-            education: 'Academic background and certifications',
-            achievements: 'Quantified accomplishments and results'
+            experience: 'How well you describe your work history',
+            skills: 'Relevant skills and abilities listed',
+            education: 'Educational background and certifications',
+            achievements: 'Specific accomplishments and results'
           }}
         />
 
         <CategorySection
-          title="Structure & Format"
+          title="Format & Organization"
           scores={score.structure}
           descriptions={{
-            formatting: 'Professional appearance and organization',
-            sections: 'Completeness of required sections',
-            length: 'Appropriate content length (1-2 pages)',
-            readability: 'Clarity and ease of reading'
+            formatting: 'Professional appearance and layout',
+            sections: 'Has all important sections (contact, experience, etc.)',
+            length: 'Right amount of content (not too long or short)',
+            readability: 'Easy to scan and read quickly'
           }}
         />
 
         <CategorySection
-          title="Optimization"
+          title="Job Market Appeal"
           scores={score.optimization}
           descriptions={{
-            keywords: 'Industry-relevant terminology',
-            actionVerbs: 'Strong, impactful language',
-            quantification: 'Use of numbers and metrics',
-            relevance: 'Alignment with target roles'
+            keywords: 'Uses terms employers look for',
+            actionVerbs: 'Strong words that show impact',
+            quantification: 'Includes numbers and specific results',
+            relevance: 'Matches what employers want to see'
           }}
         />
       </div>
 
-      {/* Score Legend */}
+      {/* Score Guide */}
       <div className="bg-gray-50 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">Score Guide</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">What Your Score Means</h4>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center">
             <div className="w-3 h-3 bg-emerald-500 rounded mr-2"></div>
-            <span>85-100%: Excellent</span>
+            <span>85-100%: Outstanding</span>
           </div>
           <div className="flex items-center">
             <div className="w-3 h-3 bg-blue-500 rounded mr-2"></div>
-            <span>70-84%: Strong</span>
+            <span>70-84%: Good</span>
           </div>
           <div className="flex items-center">
             <div className="w-3 h-3 bg-amber-500 rounded mr-2"></div>
-            <span>55-69%: Good</span>
+            <span>55-69%: Fair</span>
           </div>
           <div className="flex items-center">
             <div className="w-3 h-3 bg-red-500 rounded mr-2"></div>

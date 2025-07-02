@@ -22,68 +22,81 @@ export class GPTResumeAnalyzer {
 
   private buildAnalysisPrompt(): string {
     return `
-You are an expert resume reviewer and career coach. Analyze the following resume content and provide a comprehensive evaluation in JSON format.
+You are an experienced HR professional and career coach who has reviewed thousands of resumes. Analyze this resume and provide practical, realistic feedback that anyone can understand and implement.
 
 Resume Content:
 """
 ${this.content}
 """
 
-Please analyze this resume and return a JSON response with the following structure:
+Please analyze this resume and return a JSON response with the following structure. Be realistic in your scoring - most resumes have room for improvement:
 
 {
   "score": {
-    "overall": number (0-100),
+    "overall": number (0-100, be realistic - average resumes score 60-75),
     "content": {
-      "experience": number (0-100),
-      "skills": number (0-100),
-      "education": number (0-100),
-      "achievements": number (0-100)
+      "experience": number (0-100, based on how well work history is described),
+      "skills": number (0-100, based on relevant skills listed),
+      "education": number (0-100, based on educational background),
+      "achievements": number (0-100, based on specific accomplishments mentioned)
     },
     "structure": {
-      "formatting": number (0-100),
-      "sections": number (0-100),
-      "length": number (0-100),
-      "readability": number (0-100)
+      "formatting": number (0-100, how professional and organized it looks),
+      "sections": number (0-100, has key sections like contact, experience, education),
+      "length": number (0-100, appropriate length - not too short or long),
+      "readability": number (0-100, easy to scan and read quickly)
     },
     "optimization": {
-      "keywords": number (0-100),
-      "actionVerbs": number (0-100),
-      "quantification": number (0-100),
-      "relevance": number (0-100)
+      "keywords": number (0-100, uses relevant job-related terms),
+      "actionVerbs": number (0-100, uses strong verbs like "managed", "created"),
+      "quantification": number (0-100, includes numbers, percentages, results),
+      "relevance": number (0-100, content matches typical job requirements)
     }
   },
   "advice": [
     {
-      "category": "string",
-      "issue": "string",
-      "suggestion": "string",
+      "category": "string (e.g., 'Work Experience', 'Contact Info', 'Skills')",
+      "issue": "string (clear, simple explanation of what's missing or wrong)",
+      "suggestion": "string (specific, actionable advice anyone can follow)",
       "impact": "critical|high|medium|low",
-      "examples": ["string", "string"]
+      "examples": ["practical examples they can use"]
     }
   ],
   "insights": {
     "wordCount": number,
     "pageEstimate": number,
-    "experienceYears": number,
-    "skillsCount": number,
-    "quantifiedAchievements": number,
+    "experienceYears": number (estimate from dates/content),
+    "skillsCount": number (count of skills mentioned),
+    "quantifiedAchievements": number (count of numbers/results mentioned),
     "actionVerbsUsed": number,
     "contactInfoComplete": boolean,
-    "sectionsFound": ["string"]
+    "sectionsFound": ["list of sections like contact, experience, education, skills"]
   },
-  "strengths": ["string"],
-  "criticalIssues": ["string"],
-  "industryMatch": number (0-100)
+  "strengths": ["list of what this person is doing well"],
+  "criticalIssues": ["list of major problems that need immediate attention"],
+  "industryMatch": number (0-100, how well it matches common job requirements)
 }
 
-Scoring Guidelines:
-- Overall: Weighted average (Content 40%, Structure 35%, Optimization 25%)
-- Be realistic and constructive in scoring
-- Consider ATS compatibility
-- Focus on actionable feedback
+Focus on practical advice:
+- Use simple language, not HR jargon
+- Give specific examples they can copy
+- Focus on what employers actually look for
+- Be encouraging but honest
+- Suggest realistic improvements
+- Consider that most people aren't professional writers
 
-Provide specific, actionable advice with examples. Be honest but constructive in your assessment.
+Common issues to look for:
+- Missing contact information
+- Vague job descriptions
+- No specific achievements or results
+- Too long or too short
+- Poor formatting or organization
+- Generic skills lists
+- Outdated information
+- Spelling/grammar errors
+- Missing key sections
+
+Provide advice that helps them get interviews, not just pass automated systems.
 `
   }
 
@@ -99,7 +112,7 @@ Provide specific, actionable advice with examples. Be honest but constructive in
         messages: [
           {
             role: 'system',
-            content: 'You are an expert resume reviewer and career coach. Provide detailed, actionable feedback in the exact JSON format requested.'
+            content: 'You are an experienced HR professional and career coach. Provide practical, realistic resume feedback that normal people can understand and implement. Focus on what actually helps people get jobs.'
           },
           {
             role: 'user',
@@ -107,7 +120,7 @@ Provide specific, actionable advice with examples. Be honest but constructive in
           }
         ],
         temperature: 0.3,
-        max_tokens: 2000
+        max_tokens: 2500
       })
     })
 
